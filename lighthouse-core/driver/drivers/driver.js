@@ -103,7 +103,7 @@ class DriverBase {
     return Promise.reject(new Error('Not implemented'));
   }
 
-  executeScriptAfterPage(scriptSource) {
+  evaluateScriptOnLoad(scriptSource) {
     return this.sendCommand('Page.addScriptToEvaluateOnLoad', {
       scriptSource
     });
