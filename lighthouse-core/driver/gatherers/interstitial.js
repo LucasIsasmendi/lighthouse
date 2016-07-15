@@ -35,7 +35,7 @@ function getInterstitial() {
       // Check for nav / drawer / lightbox elements, since these are typically okay.
       // Note: overlay is an interesting one, since it *might* be valid here, such as in the case
       // of social media post deeplinks. However it seems to be the "go to" name for an interstitial
-      // so on that basis it should probably be left out.
+      // so on that basis it should probably be left out. Same goes for modal.
       const regExpValidOverlays = /menu|nav|sidebar|drawer|lightbox/i;
       const isValidOverlay = regExpValidOverlays.test(e.className) ||
           regExpValidOverlays.test(e.id) ||
