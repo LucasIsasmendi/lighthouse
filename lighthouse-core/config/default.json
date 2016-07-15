@@ -16,7 +16,8 @@
       "critical-request-chains",
       "speedline",
       "content-width",
-      "cache-contents"
+      "cache-contents",
+      "interstitial"
     ]
   },
   {
@@ -65,7 +66,8 @@
     "label",
     "tabindex",
     "content-width",
-    "cache-start-url"
+    "cache-start-url",
+    "interstitial"
   ],
 
   "aggregations": [{
@@ -228,6 +230,10 @@
           "weight": 1
         },
         "content-width": {
+          "value": true,
+          "weight": 1
+        },
+        "interstitial": {
           "value": true,
           "weight": 1
         }
