@@ -79,3 +79,6 @@ Artifacts.prototype.ContentWidth;
 
 /** @type {!Array<string>} */
 Artifacts.prototype.CacheContents;
+
+/** @type {!Array<!Object>} */
+Artifacts.prototype.Interstitial;
