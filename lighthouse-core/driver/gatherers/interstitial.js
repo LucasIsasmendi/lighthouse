@@ -28,19 +28,28 @@ function getInterstitial() {
   const candidates = [...document.querySelectorAll('*')]
     .filter(e => {
       // Check for position fixed.
-      const isFixed = window.getComputedStyle(e).position === 'fixed';
+      const computedStyle = window.getComputedStyle(e);
+      const isFixed = computedStyle.position === 'fixed';
 
       // Check for nav elements.
       const regExpNav = /menu|nav|sidebar|drawer/i;
-      const isNav = regExpNav.test(e.className) || regExpNav.test(e.id);
+      const isNav = regExpNav.test(e.className) ||
+          regExpNav.test(e.id) ||
+          regExpNav.test(e.nodeName);
 
       // Get the size of the element.
       const eBCR = e.getBoundingClientRect();
       const size = eBCR.width * eBCR.height;
 
+      // Check it's visible.
+      const isVisible = computedStyle.opacity > 0 && computedStyle.display !== 'none';
+
+      // Check it's clickable
+      const isClickable = computedStyle.pointerEvents !== 'none';
+
       // Only allow through fixed, non-nav elements whose size makes them cover
-      // over 50% of the available viewport.
-      return isFixed && !isNav && (size / viewportSize > 0.5);
+      // over 50% of the available viewport, and are visible and clickable.
+      return isClickable && isVisible && isFixed && !isNav && (size / viewportSize > 0.5);
     });
 
   // __returnResults is injected by evaluateAsync for passing back the result.
