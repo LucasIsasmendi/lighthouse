@@ -24,32 +24,33 @@ const Gather = require('./gather');
 function getInterstitial() {
   const viewportSize = window.outerWidth * window.outerHeight;
 
-  // Walk the tree of elements
+  // Walk the tree of elements...
   const candidates = [...document.querySelectorAll('*')]
     .filter(e => {
       // Check for position fixed.
       const computedStyle = window.getComputedStyle(e);
       const isFixed = computedStyle.position === 'fixed';
 
-      // Check for nav elements.
-      const regExpNav = /menu|nav|sidebar|drawer/i;
-      const isNav = regExpNav.test(e.className) ||
-          regExpNav.test(e.id) ||
-          regExpNav.test(e.nodeName);
+      // Check for nav / drawer / lightbox elements, since these are typically okay.
+      const regExpValidOverlays = /menu|nav|sidebar|drawer|lightbox/i;
+      const isValidOverlay = regExpValidOverlays.test(e.className) ||
+          regExpValidOverlays.test(e.id) ||
+          regExpValidOverlays.test(e.nodeName);
 
       // Get the size of the element.
       const eBCR = e.getBoundingClientRect();
       const size = eBCR.width * eBCR.height;
+      const isCoveringViewport = ((size / viewportSize) > 0.5);
 
       // Check it's visible.
       const isVisible = computedStyle.opacity > 0 && computedStyle.display !== 'none';
 
-      // Check it's clickable
+      // Check it's clickable.
       const isClickable = computedStyle.pointerEvents !== 'none';
 
-      // Only allow through fixed, non-nav elements whose size makes them cover
+      // Only allow through fixed, non-nav/lightbox elements whose size makes them cover
       // over 50% of the available viewport, and are visible and clickable.
-      return isClickable && isVisible && isFixed && !isNav && (size / viewportSize > 0.5);
+      return isClickable && isVisible && isFixed && !isValidOverlay && isCoveringViewport;
     });
 
   // __returnResults is injected by evaluateAsync for passing back the result.
