@@ -29,9 +29,13 @@ function getInterstitial() {
     .filter(e => {
       // Check for position fixed.
       const computedStyle = window.getComputedStyle(e);
-      const isFixed = computedStyle.position === 'fixed';
+      const isFixedOrAbsolute = computedStyle.position === 'fixed' ||
+          computedStyle.position === 'absolute';
 
       // Check for nav / drawer / lightbox elements, since these are typically okay.
+      // Note: overlay is an interesting one, since it *might* be valid here, such as in the case
+      // of social media post deeplinks. However it seems to be the "go to" name for an interstitial
+      // so on that basis it should probably be left out.
       const regExpValidOverlays = /menu|nav|sidebar|drawer|lightbox/i;
       const isValidOverlay = regExpValidOverlays.test(e.className) ||
           regExpValidOverlays.test(e.id) ||
@@ -48,9 +52,9 @@ function getInterstitial() {
       // Check it's clickable.
       const isClickable = computedStyle.pointerEvents !== 'none';
 
-      // Only allow through fixed, non-nav/lightbox elements whose size makes them cover
+      // Only allow through fixed / absolute, non-nav/lightbox elements whose size makes them cover
       // over 50% of the available viewport, and are visible and clickable.
-      return isClickable && isVisible && isFixed && !isValidOverlay && isCoveringViewport;
+      return isClickable && isVisible && isFixedOrAbsolute && !isValidOverlay && isCoveringViewport;
     });
 
   // __returnResults is injected by evaluateAsync for passing back the result.
